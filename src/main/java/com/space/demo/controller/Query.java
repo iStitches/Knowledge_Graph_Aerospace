@@ -43,12 +43,12 @@ public class Query {
         Spider.create(shotForecast).addUrl("http://www.spaceflightfans.cn/").addPipeline(popline).thread(5).run();
     }
 
-//    /**
-//     * 航天产品介绍
-//     */
-//    @GetMapping("/spaceTechnology")
-//    public void getSpaceTechnology(HttpServletResponse response){
-//        ResultsPopline popline=new ResultsPopline(response);
-//        Spider.create(detailProduct).addUrl("http://www.cnsa.gov.cn/n6758824/n6759008/n6759011/index.html").addPipeline(popline).thread(5).run();
-//    }
+    /**
+     * 航天产品介绍
+     */
+    @GetMapping("/spaceTechnology")
+    public void getSpaceTechnology(HttpServletResponse response){
+        ResultsPopline popline=new ResultsPopline(response);
+        Spider.create(detailProduct).addUrl("http://www.cnsa.gov.cn/n6758824/n6759008/n6759011/index.html").addPipeline(popline).thread(5).run();
+    }
 }

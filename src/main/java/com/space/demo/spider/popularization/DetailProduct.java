@@ -1,13 +1,11 @@
 package com.space.demo.spider.popularization;
 
 import com.space.demo.entity.Detail;
-import com.space.demo.spider.popline.RepositoryPopline;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
 
@@ -19,11 +17,12 @@ import java.util.List;
  */
 @Data
 @Component
+@ConfigurationProperties(prefix = "spring.spider")
 public class DetailProduct implements PageProcessor {
-    private Integer timeout=30000;
-    private Integer sleeptime=1000;
-    private Integer retrytimes=3;
-    private Integer retrysleeptime=1000;
+    private Integer timeout;
+    private Integer sleeptime;
+    private Integer retrytimes;
+    private Integer retrysleeptime;
 
     @Override
     public void process(Page page) {
@@ -51,10 +50,9 @@ public class DetailProduct implements PageProcessor {
             StringBuilder imgList=new StringBuilder();
             List<String> imgsrc=page.getHtml().xpath("//div[@class='conText']//img/@src").all();
             for(String str:imgsrc){
-                imgList.append("http://www.cnsa.gov.cn/"+str.replaceAll("\\.\\./",""));
+                imgList.append("http://www.cnsa.gov.cn/"+str.replaceAll("../","")+';');
             }
-//            System.out.println(content.toString().trim());
-            Detail detail=new Detail(type,name,content.toString().trim(),imgList.toString());
+            Detail detail=new Detail(type,name,content.toString(),imgList.toString());
             page.putField("spaceDetail",detail);
         }
     }
@@ -68,10 +66,6 @@ public class DetailProduct implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new DetailProduct())
-                .addUrl("http://www.cnsa.gov.cn/n6758824/n6759008/n6759011/index.html")
-                .addPipeline(new RepositoryPopline())
-                .thread(5)
-                .run();
+
     }
 }

@@ -11,10 +11,17 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Detail {
+    private Integer id;
     private String type;
     private String name;
     private String content;
     private String imgsrc;
+
+    public Detail(String type, String name, String toString, String toString1) {
+        this.type=type;
+        this.name=name;
+        this.content=toString;
+        this.imgsrc=toString1;
+    }
 }

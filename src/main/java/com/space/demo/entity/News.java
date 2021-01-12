@@ -8,7 +8,6 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class News {
     private List<String> tags;
     private String title;
@@ -16,4 +15,13 @@ public class News {
     private String url;
     private String imgsrc;
     private String describe;
+
+    public News(List<String> tags, String title, String date, String url, String imgsrc, String toString) {
+        this.tags=tags;
+        this.title=title;
+        this.date=date;
+        this.url=url;
+        this.imgsrc=imgsrc;
+        this.describe=toString;
+    }
 }

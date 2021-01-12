@@ -59,9 +59,5 @@ public class NewsRecommend implements PageProcessor {
 
     public static void main(String[] args) {
         Spider.create(new NewsRecommend()).addUrl("http://www.spaceflightfans.cn/").thread(5).run();
-//        String str="【长九只疯狂吹风】先进液体、固体大推力发动机新进展！将支撑长五B、重型等火箭";
-//        String pattern="【.*?】";
-//        String res=str.replaceAll(pattern,"");
-//        System.out.println(res);
     }
 }
