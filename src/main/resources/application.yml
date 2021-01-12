@@ -1,0 +1,21 @@
+spring:
+  spider:
+    timeout: 30000
+    sleeptime: 1000
+    retrytimes: 3
+    retrysleeptime: 1000
+  datasource:
+    username: root
+    password: xjx123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc.mysql://localhost:3306/aerospace?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    type: com.alibaba.druid.pool.DruidDataSource
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.space.demo.entity
+logging:
+  level:
+    com.space.demo.dao: debug
