@@ -6,10 +6,30 @@ spring:
     retrysleeptime: 1000
   datasource:
     username: root
-    password: heshui645
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/aerospace?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://39.100.119.221:3306/aerospace?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     type: com.alibaba.druid.pool.DruidDataSource
+  neo4j:
+    uri: bolt://39.100.119.221:7687
+    authentication:
+      username: neo4j
+      password: 123456
+  main:
+    allow-bean-definition-overriding: true
+  redis:
+    username: root
+    password: 123456
+    database: 0
+    host: 39.100.119.221
+    port: 6379
+    timeout: 10000
+    jedis:
+      pool:
+        maxActive: 1000
+        maxWait: 1000
+        maxIdle: 300
+        minIdle: 0
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -18,4 +38,6 @@ mybatis:
   type-aliases-package: com.space.demo.entity
 logging:
   level:
-    com.space.demo.dao: debug
+    com.space.demo.dao.graph: debug
+server:
+  port: 8085

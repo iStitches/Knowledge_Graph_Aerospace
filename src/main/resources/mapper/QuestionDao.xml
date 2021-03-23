@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.demo.dao.question.QuestionDao">
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into questionAnswer(question,itemA,itemB,itemC,itemD) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.question},#{item.itemA},#{item.itemB},#{item.itemC},#{item.itemD})
+        </foreach>
+    </insert>
+
+    <select id="getQuestionList" parameterType="java.lang.Integer" resultType="com.space.demo.entity.newsReommend.Question">
+        select * from questionAnswer limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getCorrectAnswer" resultType="java.lang.String">
+        select answer from questionAnswer where id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+             #{item}
+        </foreach>
+    </select>
+</mapper>
