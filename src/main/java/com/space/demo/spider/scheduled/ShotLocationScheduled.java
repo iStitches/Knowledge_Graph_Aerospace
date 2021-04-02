@@ -16,7 +16,7 @@ public class ShotLocationScheduled {
     @Autowired
     RedisPopline redisPopline;
 
-    @Scheduled(cron = "0 54 19 17 * ?")
+//    @Scheduled(cron = "0 38 22 20 * ?")
     public void setLocationHandler(){
         new Spider(shotLocationHandler)
                 .addUrl("http://www.aihangtian.com/fashe/china-all.html")

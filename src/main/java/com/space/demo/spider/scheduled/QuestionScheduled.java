@@ -19,7 +19,7 @@ public class QuestionScheduled {
     @Autowired
     RepositoryPopline repositoryPopline;
 
-    @Scheduled(cron = "0 9 15 22 * ?")
+//    @Scheduled(cron = "0 40 22 20 * ?")
     public void setLocationHandler(){
         new Spider(questionAnswer)
                 .addUrl("http://www.shapc.org/Salon_Test_info.aspx?ID=290")

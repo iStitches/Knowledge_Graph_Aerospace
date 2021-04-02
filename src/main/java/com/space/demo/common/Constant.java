@@ -17,6 +17,10 @@ public class Constant {
 
     public static String REDIS_PROVINCE_STEEL_PRODUCT="steelProduct";
 
+    public static String REDIS_SPACE_GRAPH_WORDS_TITLE="graphWordsTitle";
+
+    public static String REDIS_SPACE_GRAPH_WORDS_CONTENT="graphWordsContent";
+
     public static String relationVehicle="属于";
     public static String relationCountry="研制于";
     public static String relationLocation="发射于";

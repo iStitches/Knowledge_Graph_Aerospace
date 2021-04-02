@@ -112,7 +112,7 @@ public class VisualData {
     @GetMapping("/locationShotStatics")
     public ResultObj getLocationShotStatics(@RequestParam(value = "name")String name,
                                             @RequestParam(value = "page")Integer page,
-                                            @RequestParam(value = "size",defaultValue = "7")String size){
+                                            @RequestParam(value = "size",defaultValue = "5")String size){
         PageHelper.startPage(page,Integer.valueOf(size));
         List<LocationDetail> list = locationDetailService.getAllByName(name);
         PageInfo<LocationDetail> pageInfo = new PageInfo<>(list);

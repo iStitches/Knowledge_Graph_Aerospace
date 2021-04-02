@@ -25,10 +25,6 @@ public class RedisPopline implements Pipeline {
             for(Map.Entry<String,Object> entry:entries){
                 redisName = entry.getKey();
                 List countMap = (List) entry.getValue();
-//                for(Map.Entry<String,Object> entry1: countMap.entrySet()){
-//                    String redisvalue = JSONUtil.parseObjToJson(entry1.getValue());
-//                    redisUtil.setHash(redisName,entry1.getKey(),redisvalue);
-//                }
                 redisUtil.setValue(redisName,JSONUtil.parseArrayToJson(countMap));
             }
         }

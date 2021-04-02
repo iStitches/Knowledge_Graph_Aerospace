@@ -1,8 +1,10 @@
 package com.space.demo.spider.popline;
 
+import com.space.demo.common.ChildNode;
 import com.space.demo.controller.Query;
 import com.space.demo.entity.newsReommend.Question;
 import com.space.demo.entity.visualData.localtion.LocationDetail;
+import com.space.demo.service.graph.ChildNodeService;
 import com.space.demo.service.question.QuestionService;
 import com.space.demo.service.visual.LocationDetailService;
 import com.space.demo.spider.newsRecommend.QuestionAnswer;
@@ -26,6 +28,8 @@ public class RepositoryPopline implements Pipeline {
     QuestionService questionService;
     @Autowired
     LocationDetailService locationDetailService;
+    @Autowired
+    ChildNodeService childNodeService;
 
     @Override
     public void process(ResultItems resultItems, Task task) {
@@ -43,6 +47,10 @@ public class RepositoryPopline implements Pipeline {
                 else if(objectList.get(0) instanceof LocationDetail){
                     List<LocationDetail> locationDetails = (List<LocationDetail>) map.getValue();
                     locationDetailService.batchInsert(locationDetails);
+                }
+                else if(objectList.get(0) instanceof ChildNode){
+                    List<ChildNode> childNodes = (List<ChildNode>)map.getValue();
+                    childNodeService.batchInsertChildNodes(childNodes);
                 }
             }
         }

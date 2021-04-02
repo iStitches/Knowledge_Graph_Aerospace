@@ -17,7 +17,7 @@ public class TrackCountScheduled {
     @Autowired
     TrackDataHandler trackDataHandler;
 
-    @Scheduled(cron = "0 24 19 17 * ?")
+//    @Scheduled(cron = "0 35 27 20 * ?")
     public void setTrackCount(){
         Spider.create(trackDataHandler)
                 .addUrl("http://www.spaceflightfans.cn/from-1974-to-1990-years")

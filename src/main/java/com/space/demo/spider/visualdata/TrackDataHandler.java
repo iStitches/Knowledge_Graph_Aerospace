@@ -2,10 +2,12 @@ package com.space.demo.spider.visualdata;
 
 import com.space.demo.common.Constant;
 import com.space.demo.entity.visualData.TrackCount;
+import com.space.demo.spider.popline.RedisPopline;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
 
@@ -25,10 +27,7 @@ public class TrackDataHandler implements PageProcessor {
     @Value("${spring.spider.retrysleeptime}")
     private Integer retrysleeptime;
 
-//    private Integer timeout=30000;
-//    private Integer sleeptime=1000;
-//    private Integer retrytimes=3;
-//    private Integer retrysleeptime=1000;
+
     private Map<String,Integer> trackCount = new HashMap<>();
 
     @Override
@@ -69,5 +68,13 @@ public class TrackDataHandler implements PageProcessor {
                 .setSleepTime(sleeptime)
                 .setRetryTimes(retrytimes)
                 .setRetrySleepTime(retrysleeptime);
+    }
+
+    public static void main(String[] args) {
+        new Spider(new TrackDataHandler())
+                .addUrl("http://www.spaceflightfans.cn/from-1974-to-1990-years")
+                .addPipeline(new RedisPopline())
+                .thread(5)
+                .run();
     }
 }

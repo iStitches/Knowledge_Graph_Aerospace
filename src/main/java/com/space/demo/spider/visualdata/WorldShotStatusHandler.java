@@ -3,10 +3,12 @@ package com.space.demo.spider.visualdata;
 import com.space.demo.common.Constant;
 import com.space.demo.entity.visualData.WorldCountry;
 import com.space.demo.entity.visualData.WorldShotStatue;
+import com.space.demo.spider.popline.RedisPopline;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
 
@@ -125,4 +127,12 @@ public class WorldShotStatusHandler implements PageProcessor {
                     .setRetryTimes(retrytimes)
                     .setRetrySleepTime(retrysleeptime);
         }
+
+    public static void main(String[] args) {
+        new Spider(new WorldShotStatusHandler())
+                .addUrl("http://www.aihangtian.com/fashe/index.html")
+                .addPipeline(new RedisPopline())
+                .thread(6)
+                .run();
+    }
 }

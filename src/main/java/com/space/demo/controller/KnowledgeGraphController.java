@@ -3,6 +3,7 @@ package com.space.demo.controller;
 import com.space.demo.common.*;
 import com.space.demo.entity.knowledgeGraph.*;
 import com.space.demo.service.graph.*;
+import com.space.demo.util.WordParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,8 @@ public class KnowledgeGraphController {
     TransportRocketService transportRocketService;
     @Autowired
     VehicleService vehicleService;
+    @Autowired
+    ChildNodeService childNodeService;
 
     /**
      * 查询结点+关系
@@ -57,7 +60,6 @@ public class KnowledgeGraphController {
              case 2:perlevelNums=maxNums/4;break;
              case 3:perlevelNums=maxNums/5;break;
              case 4:perlevelNums=maxNums/5;break;
-//             case 5:perlevelNums=maxNums/3;break;
          }
          for(int i=1;i<=depth;i++){
              //如果是分类(第一层   包括分类+航天器)
@@ -83,8 +85,6 @@ public class KnowledgeGraphController {
                      //如果这一层是航天器（第二层   包括航天器+国家+发射场+运输火箭+航天员）
                      if(obj instanceof Vehicle){
                              String vehicleName = ((Vehicle) obj).getName();
-//                             nodeList.add(new CustomNode(vehicleName,1));
-//                             allNums++;
                              Vehicle tmpNode = vehicleService.getNodeByName(vehicleName);
                              Country tmpCountry = tmpNode.getCountry();
                              RocketLocation tmpLocation = tmpNode.getRocketLocation();
@@ -129,9 +129,6 @@ public class KnowledgeGraphController {
                      //如果这一层是国家（第三层  包括航天机构）
                      else if(obj instanceof Country){
                          String countryName = ((Country) obj).getName();
-//                         CustomNode node = new CustomNode(countryName,2);
-//                         nodeList.add(node);
-//                         allNums++;
                          Country tmpCountry = countryService.getNodeByName(countryName);
                          Set<SpaceDepartment> spaceDepartmentSet = tmpCountry.getSpaceDepartmentSet();
                          if(spaceDepartmentSet != null && !spaceDepartmentSet.isEmpty())
@@ -148,8 +145,6 @@ public class KnowledgeGraphController {
                      //如果这一层是航天机构（第四层  包括航天新闻）
                      else if(obj instanceof SpaceDepartment){
                          String deptName = ((SpaceDepartment) obj).getCNname();
-//                         nodeList.add(new CustomNode(deptName,6));
-//                         allNums++;
                          SpaceDepartment tmpDept = spaceDepartmentService.getNodeByName(deptName);
                          Set<SpaceNews> newsSet = tmpDept.getNewsSet();
                          if(newsSet != null)
@@ -206,5 +201,20 @@ public class KnowledgeGraphController {
             return ResultObj.success(obj);
         else
             return ResultObj.error(CommonEnum.NOT_FOUND.getResultCode(),"未找到对应结点数据");
+    }
+
+    /**
+     * tf-idf 解析用户输入的关键词，对比后得出相似度最高的值
+     */
+    @GetMapping("/nodeQuery")
+    public ResultObj getNodeQuery(@RequestParam(value = "question") String question){
+        List<String> nameList = childNodeService.getAllNodesName();
+        String name = WordParser.getAnswer(question,nameList);
+        if(name != null){
+            List<ChildNode> res = childNodeService.getAllChildNodes(name);
+            return ResultObj.success(res);
+        }
+        else
+            return ResultObj.error(CommonEnum.NOT_FOUND.getResultCode(),"不是很明白您的问题，换一个问题试试吧！");
     }
 }

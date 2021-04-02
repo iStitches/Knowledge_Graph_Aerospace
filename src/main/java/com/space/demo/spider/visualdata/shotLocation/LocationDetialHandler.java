@@ -1,6 +1,7 @@
 package com.space.demo.spider.visualdata.shotLocation;
 
 import com.space.demo.entity.visualData.localtion.LocationDetail;
+import com.space.demo.spider.popline.RedisPopline;
 import com.space.demo.spider.popline.RepositoryPopline;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -74,5 +75,13 @@ public class LocationDetialHandler implements PageProcessor {
                 .setSleepTime(sleeptime)
                 .setRetryTimes(retrytimes)
                 .setRetrySleepTime(retrysleeptime);
+    }
+
+    public static void main(String[] args) {
+        new Spider(new LocationDetialHandler())
+                .addUrl("https://baike.baidu.com/item/%E4%B8%AD%E5%9B%BD%E6%96%87%E6%98%8C%E8%88%AA%E5%A4%A9%E5%8F%91%E5%B0%84%E5%9C%BA/20183072?fromtitle=%E6%96%87%E6%98%8C%E5%8F%91%E5%B0%84%E5%9C%BA&fromid=23602423&fr=aladdin#9")
+                .addPipeline(new RedisPopline())
+                .thread(5)
+                .run();
     }
 }

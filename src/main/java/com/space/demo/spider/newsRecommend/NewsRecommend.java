@@ -31,8 +31,7 @@ public class NewsRecommend implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        List<Selectable> lists=page.getHtml().xpath("//div[@id='main-content']//article").nodes();
-        lists.remove(0);
+        List<Selectable> lists=page.getHtml().xpath("//div[@id='main-content' or @id='content']//article").nodes();
         List<News> results=new ArrayList<>();
         //获取分类标签
         for(Selectable node:lists){
@@ -41,13 +40,21 @@ public class NewsRecommend implements PageProcessor {
             String date=node.xpath("//time[@class='entry-date']/text()").get();
             String imgsrc=node.xpath("//div[@class='entry-content']//img/@src").get();
             List<String> des=node.xpath("//div[@class='entry-content']//p//allText()|//span/allText()").replace("【.*?】","").all();
-            StringBuilder describe=new StringBuilder();
-            for(String str:des){
-                if(!str.matches("\\S*"))
-                    describe.append(str);
+            String descripe = null;
+            if(des==null || des.size()==0)
+                descripe = "";
+            else{
+                StringBuilder describe=new StringBuilder();
+                for(String str:des){
+                    if(str.startsWith("<"))
+                        break;
+                    if(!str.matches("\\S*"))
+                        describe.append(str);
+                }
+                descripe = describe.toString();
             }
             String url=node.xpath("//h1[@class='entry-title']/a/@href").get();
-            News one=new News(tags,title,date,url,imgsrc,describe.toString());
+            News one=new News(tags,title,date,url,imgsrc,descripe);
             results.add(one);
         }
         page.putField("newsList",results);

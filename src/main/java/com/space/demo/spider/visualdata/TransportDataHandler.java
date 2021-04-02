@@ -3,10 +3,12 @@ package com.space.demo.spider.visualdata;
 import com.space.demo.common.Constant;
 import com.space.demo.entity.knowledgeGraph.TransportRocket;
 import com.space.demo.entity.visualData.ChinaTransport;
+import com.space.demo.spider.popline.RedisPopline;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
 
@@ -70,5 +72,13 @@ public class TransportDataHandler implements PageProcessor {
                 .setSleepTime(sleeptime)
                 .setRetryTimes(retrytimes)
                 .setRetrySleepTime(retrysleeptime);
+    }
+
+    public static void main(String[] args) {
+        new Spider(new TransportDataHandler())
+                .addPipeline(new RedisPopline())
+                .addUrl("http://www.spaceflightfans.cn/world-global-space-flight-real-time-statistics-table-in-2021-years")
+                .thread(5)
+                .run();
     }
 }

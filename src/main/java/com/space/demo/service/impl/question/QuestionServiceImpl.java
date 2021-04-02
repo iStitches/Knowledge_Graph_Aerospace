@@ -24,7 +24,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<Question> getQuestion(Integer page, Integer size) {
         Integer start = (page-1)*size;
-        return dao.getQuestionList(start,size);
+        return dao.getQuestionList(size,start);
     }
 
     @Override

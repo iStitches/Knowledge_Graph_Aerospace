@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.space.demo.dao.graph.ChildNodeDao">
+    <!--批量插入-->
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into childNode(name,size,value,url,categoryId) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name},#{item.size},#{item.value},#{item.url},#{item.categoryId})
+        </foreach>
+    </insert>
+
+    <select id="getAllName" resultType="java.lang.String">
+        select name from childNode
+    </select>
+
+    <select id="getUnionNodes" resultType="com.space.demo.common.ChildNode">
+        select * from childNode where categoryId = (select categoryId from childNode where name = #{name})
+    </select>
+</mapper>
