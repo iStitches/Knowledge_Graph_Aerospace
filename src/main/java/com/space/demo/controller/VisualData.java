@@ -1,6 +1,8 @@
 package com.space.demo.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.space.demo.common.Constant;
@@ -26,6 +28,8 @@ public class VisualData {
     RedisUtil util;
     @Autowired
     LocationDetailService locationDetailService;
+    @Autowired
+    RedisUtil redisUtil;
 
     /**
      * 获取 绕行轨道总次数
@@ -74,6 +78,8 @@ public class VisualData {
     public ResultObj getShotData(){
         List<ChinaShotStatue> res = new ArrayList<>();
         String json = util.getValue(Constant.REDIS_SHOT_SUCCESS_FAILURE);
+        JSONObject jsonObject = JSON.parseObject(json);
+        JSONArray jsonArray1 = JSON.parseArray(json);
         JSONArray jsonArray = JSONUtil.parseJsonToArray(json);
         for(int i=0;i<jsonArray.size();i++)
             res.add(jsonArray.getObject(i,ChinaShotStatue.class));

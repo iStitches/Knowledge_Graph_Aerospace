@@ -18,7 +18,7 @@ public class ChildNodesScheduled {
     @Autowired
     RepositoryPopline repositoryPopline;
 
-//    @Scheduled(cron = "0 32 12 2 * ?")
+//    @Scheduled(cron = "0 46 15 25 * ?")
     public void test(){
         new Spider(graphHandler)
                 .addPipeline(repositoryPopline)

@@ -16,7 +16,7 @@ public class LocationDetailScheduled {
     @Autowired
     RepositoryPopline popline;
 
-//    @Scheduled(cron = "0 48 22 20 * ?")
+//    @Scheduled(cron = "0 45 15 25 * ?")
     public void exercise(){
         new Spider(handler)
                 .addUrl("https://baike.baidu.com/item/%E4%B8%AD%E5%9B%BD%E6%96%87%E6%98%8C%E8%88%AA%E5%A4%A9%E5%8F%91%E5%B0%84%E5%9C%BA/20183072?fromtitle=%E6%96%87%E6%98%8C%E5%8F%91%E5%B0%84%E5%9C%BA&fromid=23602423&fr=aladdin#9")

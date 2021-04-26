@@ -16,7 +16,7 @@ public class WorldShotScheduled {
     @Autowired
     RedisPopline redisPopline;
 
-//    @Scheduled(cron = "0 35 22 20 * ?")
+//    @Scheduled(cron = "0 47 15 25 * ?")
     public void setWorldData(){
         new Spider(worldShotStatusHandler)
                 .addUrl("http://www.aihangtian.com/fashe/index.html")

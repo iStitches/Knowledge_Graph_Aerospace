@@ -3,6 +3,7 @@ package com.space.demo.spider.visualdata;
 import com.space.demo.common.Constant;
 import com.space.demo.entity.visualData.ChinaShotStatue;
 import com.space.demo.spider.popline.RedisPopline;
+import com.space.demo.util.JSONUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -12,11 +13,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 public class ChinaShotTest implements PageProcessor {
@@ -32,57 +29,38 @@ public class ChinaShotTest implements PageProcessor {
     @Value("${spring.spider.retrysleeptime}")
     private Integer retrysleeptime;
 
+//    private Integer timeout = 30000;
+//    private Integer sleeptime = 1000;
+//    private Integer retrytimes = 3;
+//    private Integer retrysleeptime = 1000;
+
 
     private List<ChinaShotStatue> statusList = new ArrayList<>();
-    private Map<Integer, Map<String,Integer>> dataMap = new HashMap<>();
 
     @Override
     public void process(Page page) {
-        List<Selectable> nodes = page.getHtml().xpath("//div[@class='fslb']/span[@id='DataList1']/span").nodes();
-        Pattern pattern1 = Pattern.compile("\\d+(?=年)");
-        Pattern pattern2 = Pattern.compile("(?<=发射状态：).+");
-
+        List<Selectable> nodes = page.getHtml().xpath("//table[@log-set-param='table_view'][2]/tbody/tr").nodes();
+        nodes.remove(0);
+        nodes.remove(nodes.size()-1);
+        //迄今为止所有年爬取
         for(Selectable node:nodes){
-            Integer year = null;
-            String time = node.xpath("//div[@class='sj']/allText()").get();
-//            System.out.println(time);
-            Matcher matcher1 = pattern1.matcher(time);
-            if(matcher1.find())
-                year = Integer.valueOf(matcher1.group());
-            String statue = node.xpath("//div[@class='zt']/allText()").get();
-            Matcher matcher2 = pattern2.matcher(statue);
-            if(matcher2.find())
-                statue = matcher2.group();
-//            System.out.println(statue);
-            if (!dataMap.containsKey(year)){
-                Map<String,Integer> inner = new HashMap();
-                inner.put("success",0);
-                inner.put("failure",0);
-                inner.put("other",0);
-                dataMap.put(year,inner);
-            }
-            switch (statue){
-                case "发射成功":dataMap.get(year).put("success",dataMap.get(year).get("success")+1);break;
-                case "发射失败":dataMap.get(year).put("failure",dataMap.get(year).get("failure")+1);break;
-                default:dataMap.get(year).put("other",dataMap.get(year).get("other")+1);
-            }
+            List<Selectable> tdLists = node.xpath("//td").nodes();
+            ChinaShotStatue statue = new ChinaShotStatue();
+            Integer year = Integer.valueOf(tdLists.get(0).xpath("//div/allText()").get().replace("年",""));
+            statue.setYear(year);
+            statue.setSuccess(Integer.valueOf(tdLists.get(2).xpath("//div/allText()").get().replace("·","")));
+            statue.setFailure(Integer.valueOf(tdLists.get(3).xpath("//div/allText()").get()));
+            statue.setOther(0);
+            statue.setAccumulateAll(Integer.valueOf(tdLists.get(4).xpath("//div/allText()").get()));
+            statue.setAccumulateSuccess(Integer.valueOf(tdLists.get(5).xpath("//div/allText()").get()));
+            statue.setAccumulateFailure(Integer.valueOf(tdLists.get(6).xpath("//div/allText()").get()));
+            statusList.add(statue);
         }
-        List<Selectable> urlList = page.getHtml().xpath("//div[@class='div_fenye']/a").nodes();
-        int i = 0;
-        for(i=0;i<urlList.size();i++){
-            Selectable url = urlList.get(i);
-            if(url.xpath("/a/allText()").get().equals("下一页")){
-                page.addTargetRequest("http://www.aihangtian.com/"+url.xpath("/a/@href").get());
-                break;
-            }
-
-        }
-        if(i == urlList.size()){
-            for(Map.Entry<Integer, Map<String,Integer>> entry:dataMap.entrySet()){
-                statusList.add(new ChinaShotStatue(entry.getKey(),entry.getValue().get("success"),entry.getValue().get("failure"),entry.getValue().get("other")));
-            }
-            page.putField(Constant.REDIS_SHOT_SUCCESS_FAILURE,statusList);
-        }
+        //数据持久化到文件
+        String json = JSONUtil.parseArrayToJson(statusList);
+        JSONUtil.saveJsonDataToFile("src/main/resources/static/chinaShotEveryYear.json",json);
+        //数据转存到Redis中
+        page.putField(Constant.REDIS_SHOT_SUCCESS_FAILURE,statusList);
     }
 
     @Override
@@ -95,9 +73,9 @@ public class ChinaShotTest implements PageProcessor {
 
     public static void main(String[] args) {
         new Spider(new ChinaShotTest())
-                .addUrl("http://www.aihangtian.com/fashe/china-all.html")
+                .addUrl("https://baike.baidu.com/item/%E4%B8%AD%E5%9B%BD%E8%BF%90%E8%BD%BD%E7%81%AB%E7%AE%AD%E5%8F%91%E5%B0%84%E8%AE%B0%E5%BD%95%E7%BB%AD%E8%A1%A8/22332448?fr=aladdin#2")
                 .addPipeline(new RedisPopline())
-                .thread(5)
+                .thread(1)
                 .run();
     }
 }

@@ -12,4 +12,7 @@ public class ChinaShotStatue {
     private Integer success;
     private Integer failure;
     private Integer other;
+    private Integer accumulateAll;  //累计发射次数
+    private Integer accumulateSuccess;     //成功次数累计
+    private Integer accumulateFailure;  //失败次数累计
 }

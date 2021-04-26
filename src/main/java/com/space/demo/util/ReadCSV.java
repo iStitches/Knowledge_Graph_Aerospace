@@ -72,5 +72,6 @@ public class ReadCSV {
         ArrayList list = new ArrayList();
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("static/coal.csv");
         ReadCSV.readCSV(inputStream,list,EnergyProvice.class);
+        System.out.println("asdfsd");
     }
 }
