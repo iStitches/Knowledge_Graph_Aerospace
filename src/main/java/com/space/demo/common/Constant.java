@@ -1,16 +1,17 @@
 package com.space.demo.common;
 
 public class Constant {
+    //绕行轨道统计
     public static String REDIS_TRACK_COUNT="aerospace_trackcount";
-
+    //中国发射成功失败
     public static String REDIS_SHOT_SUCCESS_FAILURE="aerospace_shotsuccessandfailure";
-
+    //发射场
     public static String REDIS_SHOT_LOCATION="aerospace_shotlocation";
-
+    //世界发射
     public static String REDIS_WORLD_SHOTSTATUS="aerospace_worldstatus";
-
+    //中国
     public static String REDIS_CHINA_TRANSPORT="aerospace_chinatransport";
-
+    //世界经济
     public static String REDIS_WORLD_ECONOMY="aerospace_worldeconomy";
 
     public static String REDIS_PROVINCE_COAL_PRODUCT="coalProduct";

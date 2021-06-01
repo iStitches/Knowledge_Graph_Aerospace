@@ -16,7 +16,7 @@ public class TransportScheduled {
     @Autowired
     RedisPopline redisPopline;
 
-//    @Scheduled(cron = "0 51 15 25 * ?")
+    @Scheduled(cron = "0 8 20 10 * ?")
     public void setTransportData(){
         new Spider(handler)
                 .addPipeline(redisPopline)
